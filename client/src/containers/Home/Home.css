@@ -1,0 +1,134 @@
+.home__container {
+  min-height: 100vh;
+}
+
+.home__contentbox {
+  display: flex;
+  width: 90%;
+  margin: 5rem auto;
+  flex-wrap: wrap;
+  position: relative;
+  transition: all 3s;
+}
+
+.home__container div {
+  align-self: center;
+}
+
+@media (max-width: 699px) {
+  .home__contentbox {
+      width: 95%;
+      flex-direction: column;
+      display: flex;
+      margin: 1rem auto;
+   }
+}
+
+.modal__description {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  padding: 1rem;
+  border-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-left-radius: 0;
+  background: linear-gradient(to right, #ef6dbd, #f0f8ff);
+  width: 50%;
+  box-shadow: 1px 3px 10px #ccc;
+  z-index: 900;
+  display: none;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.modal__description2 {
+  position: absolute;
+  display: none;
+  top: 30%;
+  left: 6%;
+  padding: .5rem;
+  border-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-left-radius: 0;
+  background: linear-gradient(to right, #34abed, #48cee9);
+  width: 40%;
+  box-shadow: 1px 3px 10px #ccc;
+  z-index: 900;
+  opacity: 0;
+  transition: opacity 3s;
+}
+
+.home__sharecontainer {
+  position: fixed;
+  z-index: 1000;
+  bottom: 2rem;
+  right: 2rem;
+}
+
+.modal__backdrop {
+  width: 100%;
+  display: none;
+  height: 100vh;
+  position: fixed;
+  z-index: 800;
+  background-color: #ef8ecc;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+.home__shareinfobackdrop {
+  display: none;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 800;
+  background-color: #00ffe7;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
+
+.home__shareinfo {
+  position: absolute;
+  bottom: 100%;
+  right: 100%;
+  display: none;
+  padding: 1rem;
+  border-radius: 10pxl;
+  background-color: #fff;
+  width: 400px;
+  background: linear-gradient(to right, #b7d3e3, #faebd7);
+  box-shadow: 2px 3px 9px #979595;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 23px;
+}
+
+.sharelink__btn {
+  padding: .8rem 1.15rem;
+  border-radius: 100%;
+  outline: none;
+  border: none;
+  color: #fff;
+  background-color: #0c5ca5;
+  box-shadow: 0px 3px 4px #423434;
+  transition: transform .3s;
+}
+
+.sharelink__btn:hover {
+  transform: scale(1.1);
+}
+
+.sharelink__btn:active {
+  transform: scale(.9);
+}
+
+.share__box {
+  transition: all 1s;
+}
+
+.share__buttons {
+  display: none;
+}
