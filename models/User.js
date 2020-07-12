@@ -17,12 +17,13 @@ const userSchema = new Schema({
     type: String,
     required: false
   },
-  comments: [
-    {
-			type: Schema.Types.ObjectId,
-			ref: 'comments'
-		}
-  ]
+  // comments: [
+  //   {
+	// 		type: Schema.Types.ObjectId,
+	// 		ref: 'comments'
+	// 	}
+  // ]
+  comments: [ String ]
 }, { timestamps: true });
 
 userSchema.plugin(uniqueValidator);
