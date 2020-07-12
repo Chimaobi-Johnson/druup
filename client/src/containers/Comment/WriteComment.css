@@ -1,0 +1,27 @@
+.writecomment__container {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.infocard__wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+}
+
+.infocard__inner {
+  padding: 1rem;
+}
+
+.infocard__inner input {
+  border: none;
+  min-height: 35vh;
+}
+
+.writecomment__button {
+  margin-top: 1rem;
+  border-radius: 0;
+}

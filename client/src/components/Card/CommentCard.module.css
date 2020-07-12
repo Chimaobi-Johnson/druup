@@ -17,7 +17,7 @@
 @media (max-width: 699px) {
   .CommentCardContainer {
       width: 90%;
-      margin: .5rem auto;
+      margin: .8rem auto;
       font-size: 1rem;
    }
 }
@@ -46,7 +46,7 @@
 
 .CommentCardContainer span:hover, .CommentCardContainer span:active {
   background-color: #faebd7;
-  /* color: #fff; */
+  color: #000;
 }
 
 .CommentCardContainer:hover {

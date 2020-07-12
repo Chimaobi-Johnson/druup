@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import Home from './containers/Home/Home';
+import WriteComment from './containers/Comment/WriteComment';
 import AuthPage from './containers/auth/AuthPage';
 import './App.css';
 
@@ -12,6 +13,7 @@ function App() {
    routes = (
      <>
       <Switch>
+        <Route path="/user/write-comment-about-me/:id" component={WriteComment} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/" exact component={Home} />
         <Redirect to="/" />

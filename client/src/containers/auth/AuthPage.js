@@ -33,11 +33,12 @@ class AuthPage extends Component {
     },
     registering: false,
     addUserName: false,
-    userData: null,
+    userName: null,
     regLoading: false,
     usernameLoading: false,
     loginLoading: false,
-    loginErrorMessage: null
+    loginErrorMessage: null,
+    regError: null
   }
 
   inputChangeHandler = (event, inputName) => {
@@ -67,9 +68,9 @@ class AuthPage extends Component {
      // const userName = this.state.RegisterForm.regUsername.value;
      let isEmailValid = this.validateEmail(email);
      if(!isEmailValid) {
-       alert('Email Not Correct')
+       this.setState({ regError: "Email is not correct" });
      } else if(password.length < 4) {
-       alert('Password cannot be less than 4 characters')
+       this.setState({ regError: "Password cannot be less than 4 characters" });
      } else {
        this.setState({ regLoading: true });
        // let regData = new FormData();
@@ -84,8 +85,14 @@ class AuthPage extends Component {
          console.log(result);
          this.setState({ addUserName: true, userData: result.data.user, regLoading: false  });
        }).catch(error => {
-         console.log(error);
          this.setState({ regLoading: false });
+         if(error.response) {
+          if(error.response.status === 409) {
+            this.setState({ regError: "Email already exists!" });
+          } else {
+            this.setState({ regError: "Server error. Please check connection settings or try again later :)" });
+          }
+       }
        })
      }
   }
@@ -95,7 +102,7 @@ class AuthPage extends Component {
     const email = this.state.loginForm.loginEmail;
     const password = this.state.loginForm.loginPassword;
     if(email === '') {
-      alert('Email field cannot be empty!');
+      this.setState({ loginErrorMessage: 'Email field cannot be empty!' })
       return;
     }
     this.setState({ loginLoading: true });
@@ -137,19 +144,40 @@ class AuthPage extends Component {
           userName: userName,
           userId: this.state.userData._id
         }
-        axios.post('/api/register/addusername', userNameData).then(user => {
-          console.log(user);
-          this.setState({ userData: user.data, usernameLoading: false });
-          this.props.history.push({
-			      pathname: '/',
-			      state: { newUser: true }
-		     	});
+        axios.post('/api/register/addusername', userNameData).then(response => {
+          console.log(response);
+          this.setState({ userName: response.data.userName, usernameLoading: false });
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('username', response.data.userName);
+          localStorage.setItem('userId', response.data.userId);
+          const remainingMilliseconds = 60 * 60 * 1000;
+          const expiryDate = new Date(
+            new Date().getTime() + remainingMilliseconds
+          );
+          localStorage.setItem('expiryDate', expiryDate.toISOString());
+          this.setAutoLogout(remainingMilliseconds);
+          this.gotoHomePage();
         }).catch(error => {
           this.setState({ usernameLoading: false })
         })
       }
 
     }
+
+    logoutHandler = () => {
+      // this.setState({ isAuth: false, token: null });
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('expiryDate');
+      localStorage.removeItem('userId');
+    };
+
+
+    setAutoLogout = milliseconds => {
+      setTimeout(() => {
+        this.logoutHandler();
+      }, milliseconds);
+    };
 
   changeAuthModeHandler = () => {
     this.setState({ registering: !this.state.registering });
@@ -181,6 +209,7 @@ class AuthPage extends Component {
     return (
       <>
         <div className="auth__formcontainer">
+          {this.state.regError ? <p className="auth__errorbox">{this.state.regError}</p> : null}
          <label htmlFor="email">Email</label>
          <input onChange={(event, inputName) => this.inputChangeHandler(event, 'regEmail')} type="email" id="email" placeholder=" Enter Email" />
         </div>
@@ -200,7 +229,7 @@ class AuthPage extends Component {
    return (
      <>
        <div className="auth__formcontainer">
-        {this.state.loginErrorMessage ? <p style={{ paddingLeft: '1rem', padding: '.5rem', color: '#fd5252', backgroundColor: '#fafafa', fontSize: '.9rem' }}>{this.state.loginErrorMessage}</p> : null }
+        {this.state.loginErrorMessage ? <p className="auth__errorbox">{this.state.loginErrorMessage}</p> : null }
         <label htmlFor="email">Email</label>
         <input onChange={(event, inputName) => this.loginInputChangeHandler(event, 'loginEmail')} type="email" id="email" placeholder=" Enter Email" />
        </div>

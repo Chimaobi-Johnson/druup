@@ -72,6 +72,8 @@
 	outline: none;
 	border: none;
 	margin-top: .5rem;
+	padding-left: .5rem;
+	color: #131313;
 }
 
 .auth__formcontainer input::placeholder {
@@ -81,6 +83,12 @@
 .auth__formcontainer input::focus {
    outline: green;
    border: 2px solid green;
+}
+
+.auth__errorbox {
+	padding: .5rem 1rem;
+	background-color: #8c0000;
+	color: #eaeaea;
 }
 
 .auth__submitbtn {
@@ -104,9 +112,9 @@
 }
 
 .auth__successalert {
-	padding: 1rem;
+	padding: .5rem 1rem;
 	background-color: lightgreen;
-	color: green;
+	color: #131313;
 	font-weight: bold;
 	margin-bottom: 1rem;
 }

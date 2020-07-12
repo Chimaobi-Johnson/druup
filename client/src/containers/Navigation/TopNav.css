@@ -13,9 +13,17 @@
   padding-left: 1rem;
 }
 
+.modalWrapper > div {
+  background-color: #0a141e;
+}
+
 .welcomeModal {
   padding: 2rem;
-  border-radius: 10px;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #0a141e;
+  border: 2px dashed #000;
+  margin: .5rem;
 }
 
 .nav__navcontainer {
@@ -35,7 +43,7 @@
 }
 
 .nav__navItems:hover {
-  background-color: #2dce89;
+  background-color: #14283c;
   cursor: pointer;
   color: #fff;
 }
