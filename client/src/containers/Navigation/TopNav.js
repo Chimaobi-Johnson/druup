@@ -20,6 +20,7 @@ class TopNav extends Component {
       /* since the username cannot be changed in the application,
          there is no need to make an api request to get current updates on user object */
       if (!token || !expiryDate) {
+        this.props.history.push("/auth");
         return;
       }
       if (new Date(expiryDate) <= new Date()) {

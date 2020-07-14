@@ -83,7 +83,11 @@ class AuthPage extends Component {
        axios.post('/api/register', regData)
        .then(result => {
          console.log(result);
-         this.setState({ addUserName: true, userData: result.data.user, regLoading: false  });
+         const email = result.data.user.email;
+         const username = email.split("@")[0];
+         const RegisterForm = { ...this.state.RegisterForm };
+         RegisterForm.regUsername.value = username;
+         this.setState({ addUserName: true, RegisterForm: RegisterForm, userData: result.data.user, regLoading: false  });
        }).catch(error => {
          this.setState({ regLoading: false });
          if(error.response) {
@@ -132,6 +136,8 @@ class AuthPage extends Component {
           this.setState({ loginErrorMessage: err.response.data.message })
         } else if (err.response.status === 401) {
           this.setState({ loginErrorMessage: err.response.data.message })
+        } else if (err.response.status === 408) {
+          this.setState({ loginErrorMessage: 'Error timeout. Please check connection settings or try again later' })
         } else {
           this.setState({ loginErrorMessage: 'Error. Please check connection settings or try again later' })
         }
@@ -189,7 +195,13 @@ class AuthPage extends Component {
     };
 
   changeAuthModeHandler = () => {
-    this.setState({ registering: !this.state.registering });
+    const registerForm = { ...this.state.RegisterForm };
+    const loginForm = { ...this.state.loginForm };
+    registerForm.regEmail.value = '';
+    registerForm.regPassword.value = '';
+    loginForm.loginEmail = '';
+    loginForm.loginPassword = '';
+    this.setState({ RegisterForm: registerForm, loginForm: loginForm, registering: !this.state.registering });
   }
 
   gotoHomePage = () => {
@@ -205,11 +217,16 @@ class AuthPage extends Component {
         <div className="auth__formcontainer">
           <p className="auth__successalert">Registration Successful</p>
          <label htmlFor="username">UserName</label>
-         <input onChange={(event, inputName) => this.inputChangeHandler(event, 'regUsername')} type="text" id="username" placeholder=" Enter UserName" />
+         <input
+           onChange={(event, inputName) => this.inputChangeHandler(event, 'regUsername')}
+           type="text"
+           value={this.state.RegisterForm.regUsername.value}
+           id="username"
+           placeholder=" Enter UserName"
+         />
         </div>
 
         <button onClick={this.addUserNameHandler} className="auth__submitbtn" type="submit">{this.state.usernameLoading ? 'Loading...' : 'Continue'}</button>
-        <button onClick={this.gotoHomePage} className="auth__submitbtn">Skip</button>
       </>
     )
   }
@@ -220,12 +237,23 @@ class AuthPage extends Component {
         <div className="auth__formcontainer">
           {this.state.regError ? <p className="auth__errorbox">{this.state.regError}</p> : null}
          <label htmlFor="email">Email</label>
-         <input onChange={(event, inputName) => this.inputChangeHandler(event, 'regEmail')} type="email" id="email" placeholder=" Enter Email" />
+         <input
+          onChange={(event, inputName) => this.inputChangeHandler(event, 'regEmail')}
+          type="email"
+          id="regEmail"
+          value={this.state.RegisterForm.regEmail.value}
+          placeholder=" Enter Email"
+         />
         </div>
 
         <div className="auth__formcontainer">
          <label htmlFor="password">Password</label>
-         <input onChange={(event, inputName) => this.inputChangeHandler(event, 'regPassword')} type="password" placeholder=" Enter Password" id="password" />
+         <input
+           onChange={(event, inputName) => this.inputChangeHandler(event, 'regPassword')}
+           type="password"
+           placeholder=" Enter Password"
+           value={this.state.RegisterForm.regPassword.value}
+           id="regPassword" />
         </div>
 
         <button onClick={this.registerUserHandler} className="auth__submitbtn" type="submit">{this.state.regLoading ? 'Loading..' : 'Register'}</button>
@@ -240,12 +268,23 @@ class AuthPage extends Component {
        <div className="auth__formcontainer">
         {this.state.loginErrorMessage ? <p className="auth__errorbox">{this.state.loginErrorMessage}</p> : null }
         <label htmlFor="email">Email</label>
-        <input onChange={(event, inputName) => this.loginInputChangeHandler(event, 'loginEmail')} type="email" id="email" placeholder=" Enter Email" />
+        <input
+          onChange={(event, inputName) => this.loginInputChangeHandler(event, 'loginEmail')}
+          type="email"
+          id="email"
+          value={this.state.loginForm.loginEmail}
+          placeholder=" Enter Email" />
        </div>
 
        <div className="auth__formcontainer">
         <label htmlFor="password">Password</label>
-        <input onChange={(event, inputName) => this.loginInputChangeHandler(event, 'loginPassword')} type="password" placeholder=" Enter Password" id="password" />
+        <input
+         onChange={(event, inputName) => this.loginInputChangeHandler(event, 'loginPassword')}
+         type="password"
+         placeholder=" Enter Password"
+         id="password"
+         value={this.state.loginForm.loginPassword}
+        />
        </div>
 
        <button onClick={this.loginHandler} className="auth__submitbtn" type="submit">{this.state.loginLoading ? 'Loading..' : 'Login'}</button>
