@@ -14,40 +14,42 @@ class TopNav extends Component {
     userName: null
   }
 
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    const expiryDate = localStorage.getItem('expiryDate');
-    /* since the username cannot be changed in the application,
-       there is no need to make an api request to get current updates on user object */
-    if (!token || !expiryDate) {
-      return;
+    componentDidMount() {
+      const token = localStorage.getItem('token');
+      const expiryDate = localStorage.getItem('expiryDate');
+      /* since the username cannot be changed in the application,
+         there is no need to make an api request to get current updates on user object */
+      if (!token || !expiryDate) {
+        return;
+      }
+      if (new Date(expiryDate) <= new Date()) {
+        this.logoutHandler();
+        return;
+      }
+      const userId = localStorage.getItem('userId');
+      const userName = localStorage.getItem('username');
+      const remainingMilliseconds =
+      new Date(expiryDate).getTime() - new Date().getTime();
+      this.setState({ isAuth: true, token: token, userName: userName, userId: userId });
+      this.setAutoLogout(remainingMilliseconds);
     }
-    if (new Date(expiryDate) <= new Date()) {
-      this.logoutHandler();
-      return;
-    }
-    const userId = localStorage.getItem('userId');
-    const userName = localStorage.getItem('username');
-    const remainingMilliseconds =
-    new Date(expiryDate).getTime() - new Date().getTime();
-    this.setState({ isAuth: true, token: token, userName: userName });
-    this.setAutoLogout(remainingMilliseconds);
-  }
 
-  logoutHandler = () => {
-    this.setState({ isAuth: false, token: null, userName: null });
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('expiryDate');
-    localStorage.removeItem('userId');
-  };
+    logoutHandler = () => {
+      this.setState({ isAuth: false, token: null, userName: null, userId: null });
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('expiryDate');
+      localStorage.removeItem('userId');
+      this.props.history.push("/auth");
+    };
 
 
-  setAutoLogout = milliseconds => {
-    setTimeout(() => {
-      this.logoutHandler();
-    }, milliseconds);
-  };
+    setAutoLogout = milliseconds => {
+      setTimeout(() => {
+        this.logoutHandler();
+      }, milliseconds);
+    };
+
 
 
   handleOpen = () => {
@@ -88,8 +90,8 @@ class TopNav extends Component {
       <h3 className="nav__tictalk">TicTalk</h3>
          <nav className="nav__nav">
             <ul className="nav__navcontainer">
-               <li className="nav__navItems">{this.state.isAuth ? this.state.userName : '' }</li>
-               <li onClick={this.logoutHandler} className="nav__navItems">{this.state.isAuth ? 'Logout' : 'Login' }</li>
+               <li className="nav__navItems">{this.state.isAuth ? this.state.user : '' }</li>
+               {this.state.isAuth ? <li onClick={this.logoutHandler} className="nav__navItems">Logout</li> : <li className="nav__navItems"><a href="/auth" style={{ textDecoration: 'none', color: 'inherit'}}>Login</a></li> }
             </ul>
          </nav>
       </div>

@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-
+import TopNav from './containers/Navigation/TopNav';
 import Home from './containers/Home/Home';
 import WriteComment from './containers/Comment/WriteComment';
 import AuthPage from './containers/auth/AuthPage';
 import './App.css';
 
-function App() {
+  class App extends Component {
 
-
+  render () {
   let routes;
    routes = (
      <>
@@ -26,6 +26,7 @@ function App() {
        {routes}
     </div>
   );
+}
 }
 
 export default App;

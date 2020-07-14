@@ -1,9 +1,10 @@
 import React from 'react';
-import TopNav from '../Navigation/TopNav';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CommentCard from '../../components/Card/CommentCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShare } from '@fortawesome/free-solid-svg-icons'
+import TopNav from "../Navigation/TopNav";
+import axios from "axios";
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -49,7 +50,35 @@ class Home extends React.Component {
 
   state = {
     shareModal: false,
-    shareText: 'Follow this link to say something about me anonymously... www.tictalk.herokuapp.com/user/251658154848548'
+    shareText: '',
+    comments: null
+  }
+
+
+  componentDidMount () {
+    const userId = localStorage.getItem('userId');
+    this.fetchComments(userId);
+    // if(!userId) {
+    //   // alert("You need to login before proceeding!");
+    //   this.props.history.push("/auth");
+    // }
+    // const userName = localStorage.getItem('username');
+    const url = window.location.origin;
+    const shareText = `Follow this link to say something about me anonymously... ${url}/user/write-comment-about-me/${userId}`;
+    this.setState({ shareText });
+  }
+
+  async fetchComments (userId) {
+     const response = await axios.post("/api/comments", { userId });
+     try {
+       if(response) {
+         console.log(response)
+         this.setState({ comments: response.data.comments });
+       }
+     } catch (err) {
+       console.log(err);
+     }
+
   }
 
   toggleShareModal = () => {
@@ -122,8 +151,8 @@ class Home extends React.Component {
   render() {
      return (
        <div className="home__container">
+       <TopNav  isAuth={this.state.isAuth} user={this.state.userName} />
          {this.renderShareModal()}
-         <TopNav />
          <div className="home__contentbox">
          <div id="secondModalBackdrop" className="modal__backdrop"></div>
          <div id="secondModal" className="modal__description">
@@ -134,12 +163,9 @@ class Home extends React.Component {
             <p>Click on the eye icon to preview and share on your social media...</p>
             <Button size="sm" onClick={(step) => this.initNextStepHandler('endTour')} style={{ backgroundColor: '#1a1919' }}>Next</Button>
          </div>
-            <CommentCard />
-            <CommentCard />
-            <CommentCard />
-            <CommentCard />
-            <CommentCard />
-            <CommentCard />
+         {this.state.comments ? this.state.comments.map(comment => (
+           <CommentCard commentText={comment} />
+         )) : <div>Loading comments..</div>}
          </div>
            <div className="home__sharecontainer">
              <div id="homeShareInfo" className="home__shareinfo">

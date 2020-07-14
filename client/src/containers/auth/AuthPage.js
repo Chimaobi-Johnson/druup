@@ -112,8 +112,17 @@ class AuthPage extends Component {
     }
     axios.post('/api/login', loginData)
     .then(response => {
-      console.log(response);
-      this.setState({ loginLoading: false });
+      this.setState({ loginLoading: false, userName: response.data.userName, usernameLoading: false });
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', response.data.userName);
+      localStorage.setItem('userId', response.data.userId);
+      const remainingMilliseconds = 60 * 60 * 1000;
+      const expiryDate = new Date(
+        new Date().getTime() + remainingMilliseconds
+      );
+      localStorage.setItem('expiryDate', expiryDate.toISOString());
+      this.setAutoLogout(remainingMilliseconds);
+      this.gotoHomePage();
     })
     .catch(err => {
       console.log(err)

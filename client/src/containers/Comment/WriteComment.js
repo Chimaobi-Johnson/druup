@@ -11,13 +11,18 @@ import './WriteComment.css';
 class WriteComment extends React.Component {
 
   state = {
-    textValue: ''
+    textValue: '',
+    sending: false,
+    sendingSuccess: false,
+    sendingFailed: false
   }
 
   changeTextHandler = (event) => {
+    let text = event.target.value;
     if(this.state.textValue.length > 250) {
       alert("You have reached the maximum amount of text");
-      return;
+      let currentVal = text.slice(0, text.length -1);
+      this.setState({ textValue: currentVal });
     }
     this.setState({ textValue: event.target.value });
   }
@@ -28,16 +33,20 @@ class WriteComment extends React.Component {
        alert("Text field cannot be empty");
        return;
      }
-     const formData = new FormData;
-     formData.append("text", this.state.textValue);
-     formData.append("userId", userId);
+     this.setState({ sending: true });
+     const formData = {
+       userId: userId,
+       text: this.state.textValue
+     }
      const response = await axios.post("/api/comment", formData);
      try {
        if(response) {
          console.log(response);
+         this.setState({ sendingSuccess: true, sendingFailed: false, sending: false });
        }
      } catch (err) {
        console.log(err);
+       this.setState({ sendingFailed: true, sendingSuccess: false, sending: false });
      }
   }
 
@@ -50,7 +59,7 @@ class WriteComment extends React.Component {
                  <h2>Say Something</h2>
                    <Label for="textarea">Say something about me*</Label>
                    <Input type="textarea" value={this.state.textValue} onChange={this.changeTextHandler} name="text" placeholder="200 characters remaining" id="textarea" />
-                   <Button onClick={this.submitCommentHandler} className="writecomment__button">Send Message <FontAwesomeIcon icon={faPaperPlane} size="sm" /></Button>
+                   <Button onClick={this.submitCommentHandler} className="writecomment__button">{ this.state.sending ? 'Sending Message...' : 'Send Message' }<FontAwesomeIcon icon={faPaperPlane} size="sm" /></Button>
                 </div>
               </InfoCard>
           </div>
