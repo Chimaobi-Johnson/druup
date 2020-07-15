@@ -46,5 +46,24 @@ router.post('/api/comments', (req, res, next) => {
    });
 })
 
+router.post('/api/user', (req, res, next) => {
+  const userId = req.body.userId;
+   User.findById(userId)
+   .then(user => {
+     if(!user) {
+       const error = new Error("Error user not found. may have been deleted.");
+       error.httpStatusCode = 404;
+       throw error;
+     }
+     res.status(200).json({ username: user.username });
+   })
+   .catch(err => {
+     console.log(err);
+     const error = new Error(err);
+     error.httpStatusCode = 500;
+     return next(error);
+   });
+})
+
 
 module.exports = router;

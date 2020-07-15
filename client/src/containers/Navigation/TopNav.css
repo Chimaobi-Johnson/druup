@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   font-size: 1rem;
+  padding: .5rem 0;
 }
 
 .nav__tictalk {
@@ -30,6 +31,8 @@
   display: flex;
   align-items: flex-end;
   list-style-type: none;
+  margin-bottom: 0;
+  font-weight: bold;
 }
 
 .nav__navItems {
@@ -38,8 +41,11 @@
 }
 
 .nav__navItems:not(:last-child) {
-  border-right: 1px solid #eaeaea;
   margin-left: auto;
+}
+
+.nav__navItems:last-child {
+  border-left: 1px solid #eaeaea;
 }
 
 .nav__navItems:hover {

@@ -13,7 +13,7 @@ import './App.css';
    routes = (
      <>
       <Switch>
-        <Route path="/user/write-comment-about-me/:id" component={WriteComment} />
+        <Route path="/click-to-write-anonymous-comment-about-me/:id" component={WriteComment} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/" exact component={Home} />
         <Redirect to="/" />

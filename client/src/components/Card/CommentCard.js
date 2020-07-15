@@ -13,7 +13,8 @@ const CommentCard = props => {
   const {
     buttonLabel,
     className,
-    commentText
+    commentText,
+    eyeView
   } = props;
 
   const [modal, setModal] = useState(false);
@@ -37,10 +38,10 @@ const CommentCard = props => {
   return (
     <div className={classes.CommentCardContainer}>
       {renderModal}
-       <h4>Anonymous</h4>
+       <h4>Comments</h4>
        <p>{commentText}</p>
        {/* <span>&larr;</span><span>&rarr;</span> */}
-       <p onClick={toggle}><FontAwesomeIcon icon={faEye} /></p>
+       { eyeView ? <p onClick={toggle}><FontAwesomeIcon icon={faEye} /></p> : null }
     </div>
   )
 }

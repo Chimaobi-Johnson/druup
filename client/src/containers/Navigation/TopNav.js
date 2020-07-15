@@ -20,7 +20,7 @@ class TopNav extends Component {
       /* since the username cannot be changed in the application,
          there is no need to make an api request to get current updates on user object */
       if (!token || !expiryDate) {
-        this.props.history.push("/auth");
+        // this.props.history.push("/auth");
         return;
       }
       if (new Date(expiryDate) <= new Date()) {
@@ -66,21 +66,29 @@ class TopNav extends Component {
      callout.style.display = 'block';
    }
 
-  }
+ }
+
+ closeWelcomeModal = () => {
+   this.setState({ modalOpen: false });
+ }
 
   renderWelcomeModal () {
-    // if(this.props.history.location.state) {
-    // if(this.props.history.location.state.newUser) {
-    return (
-      <Modal className="modalWrapper" isOpen={this.state.modalOpen} toggle={this.handleOpen}>
-        <div className="welcomeModal">
-        <h5>>Welcome! {this.state.isAuth ? this.state.userName : '' } </h5>
-        <p>Click next to get a quick guide on how to get started</p>
-        <Button style={{ backgroundColor: "#eaeaea", color: "#000" }}>Skip</Button>
-        <Button style={{ backgroundColor: "#000", border: "none", marginLeft: "1rem" }} color="primary" onClick={(step) => this.initNextStepHandler('gotoCreateNew')}>Next</Button>
-        </div>
-      </Modal>
-    )
+    if(this.props.history.location.state) {
+      if(this.props.history.location.state.newUser) {
+         return (
+           <Modal className="modalWrapper" isOpen={this.state.modalOpen} toggle={this.handleOpen}>
+            <div className="welcomeModal">
+             <h5>Hello {this.state.isAuth ? this.state.userName : '' }! </h5>
+             <p>Welcome to ticktalk app. To get started click on the share button below to share your link
+             and get responses from your friends. Their comments about you will be displayed on this page :)</p>
+             <Button onClick={this.closeWelcomeModal} style={{ backgroundColor: "#eaeaea", color: "#000", float: 'right' }}>Close</Button>
+             {/* <Button style={{ backgroundColor: "#000", border: "none", marginLeft: "1rem" }} color="primary"
+              onClick={(step) => this.initNextStepHandler('gotoCreateNew')}>Next</Button> */}
+            </div>
+           </Modal>
+          )
+        }
+      }
   }
 
   render() {
@@ -92,7 +100,7 @@ class TopNav extends Component {
          <nav className="nav__nav">
             <ul className="nav__navcontainer">
                <li className="nav__navItems">{this.state.isAuth ? this.state.user : '' }</li>
-               {this.state.isAuth ? <li onClick={this.logoutHandler} className="nav__navItems">Logout</li> : <li className="nav__navItems"><a href="/auth" style={{ textDecoration: 'none', color: 'inherit'}}>Login</a></li> }
+               {this.state.isAuth ? <li onClick={this.logoutHandler} className="nav__navItems">Logout</li> : <li className="nav__navItems"><a href="/auth" style={{ padding: 'inherit', textDecoration: 'none', color: 'inherit'}}>Login</a></li> }
             </ul>
          </nav>
       </div>

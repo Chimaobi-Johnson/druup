@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CommentCard from '../../components/Card/CommentCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShare } from '@fortawesome/free-solid-svg-icons'
@@ -51,17 +51,18 @@ class Home extends React.Component {
   state = {
     shareModal: false,
     shareText: '',
-    comments: null
+    editShareText: '',
+    comments: []
   }
 
 
   componentDidMount () {
     const userId = localStorage.getItem('userId');
     this.fetchComments(userId);
-    // if(!userId) {
-    //   // alert("You need to login before proceeding!");
-    //   this.props.history.push("/auth");
-    // }
+    if(!userId) {
+      // alert("You need to login before proceeding!");
+      this.props.history.push("/auth");
+    }
     // const userName = localStorage.getItem('username');
     const url = window.location.origin;
     const shareText = `Follow this link to say something about me anonymously... ${url}/user/write-comment-about-me/${userId}`;
@@ -94,14 +95,45 @@ class Home extends React.Component {
     document.querySelector('#shareBtn').style.display = 'none';
   }
 
+  initEditingMode = () => {
+    this.setState({ editShareText: !this.state.editShareText });
+  }
+
+  changeTextHandler = event => {
+    this.setState({ shareText: event.target.value });
+  }
+
+  renderShareText () {
+    if(this.state.editShareText) {
+      return (<Input type="textarea"
+       value={this.state.shareText}
+       onChange={this.changeTextHandler}
+       id="linkInput"
+      />)
+    }
+    return <p id="linkInput">{this.state.shareText}</p>
+  }
+
+  copyTextHandler = () => {
+   let copyText = document.getElementById("linkInput").innerHTML;
+   console.log(copyText);
+   // copyText.select();
+   // copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+   document.execCommand("copy");
+   alert("Copied text: " + copyText.value + "copytext " + copyText);
+  }
+
   renderShareModal () {
     return (
       <Modal style={{ transition: 'all .5s'}} isOpen={this.state.shareModal} fade={false} toggle={this.toggleShareModal} className={this.props.className}>
-          <ModalHeader toggle={this.toggleShareModal}>Anonymous</ModalHeader>
+          <ModalHeader toggle={this.toggleShareModal}>SHARE YOUR LINK</ModalHeader>
           <ModalBody>
            <div className="share__box">
-            <span style={{ color: 'blue' }}>Edit</span> <br />
-            {this.state.shareText}
+            <p>
+            <span style={{ color: 'blue', cursor: 'pointer', marginBottom: '.5rem' }} onClick={this.initEditingMode}>{this.state.editShareText ? 'Save' : 'Edit'}</span>
+            | <span style={{ color: 'blue', cursor: 'pointer', marginBottom: '.5rem' }} onClick={this.copyTextHandler}>Copy link</span></p>
+             <br />
+            {this.renderShareText()}
             <div className="share__buttons">
               <p>Share with </p>
                <FacebookShareButton url={this.state.shareText}><FacebookIcon size={32} round={true} /></FacebookShareButton>
@@ -148,6 +180,14 @@ class Home extends React.Component {
 
   }
 
+  renderCommentsArea () {
+    if(this.state.comments.length === 0) {
+       return <CommentCard commentText="Comments about you will be displayed here. CLICK ON SHARE BUTTON BELOW TO GET STARTED!" eyeView={false} />
+    } else {
+       return this.state.comments ? this.state.comments.map(comment => <CommentCard commentText={comment} eyeView={true} />) : <div>Loading</div>;
+    }
+  }
+
   render() {
      return (
        <div className="home__container">
@@ -163,9 +203,7 @@ class Home extends React.Component {
             <p>Click on the eye icon to preview and share on your social media...</p>
             <Button size="sm" onClick={(step) => this.initNextStepHandler('endTour')} style={{ backgroundColor: '#1a1919' }}>Next</Button>
          </div>
-         {this.state.comments ? this.state.comments.map(comment => (
-           <CommentCard commentText={comment} />
-         )) : <div>Loading comments..</div>}
+         {this.renderCommentsArea()}
          </div>
            <div className="home__sharecontainer">
              <div id="homeShareInfo" className="home__shareinfo">

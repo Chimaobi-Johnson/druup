@@ -126,7 +126,7 @@ class AuthPage extends Component {
       );
       localStorage.setItem('expiryDate', expiryDate.toISOString());
       this.setAutoLogout(remainingMilliseconds);
-      this.gotoHomePage();
+      this.props.history.push('/');
     })
     .catch(err => {
       console.log(err)

@@ -13,8 +13,21 @@ class WriteComment extends React.Component {
   state = {
     textValue: '',
     sending: false,
+    username: null,
     sendingSuccess: false,
     sendingFailed: false
+  }
+
+  componentDidMount() {
+    const userId = window.location.pathname.split("/")[3];
+    axios.post("/api/user", { userId })
+    .then(response => {
+      this.setState({ username: response.data.username });
+    })
+    .catch(err => {
+      console.log(err)
+      alert("User not found. might have been deleted!");
+    })
   }
 
   changeTextHandler = (event) => {
@@ -57,7 +70,7 @@ class WriteComment extends React.Component {
               <InfoCard>
                 <div className="infocard__inner">
                  <h2>Say Something</h2>
-                   <Label for="textarea">Say something about me*</Label>
+                   <Label for="textarea">Say something about {this.state.username ? this.state.username : 'me'}</Label>
                    <Input type="textarea" value={this.state.textValue} onChange={this.changeTextHandler} name="text" placeholder="200 characters remaining" id="textarea" />
                    <Button onClick={this.submitCommentHandler} className="writecomment__button">{ this.state.sending ? 'Sending Message...' : 'Send Message' }<FontAwesomeIcon icon={faPaperPlane} size="sm" /></Button>
                 </div>
