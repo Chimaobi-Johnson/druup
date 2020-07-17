@@ -15,7 +15,8 @@ class WriteComment extends React.Component {
     sending: false,
     username: null,
     sendingSuccess: false,
-    sendingFailed: false
+    sendingFailed: false,
+    errorMessage: null
   }
 
   componentDidMount() {
@@ -54,12 +55,11 @@ class WriteComment extends React.Component {
      const response = await axios.post("/api/comment", formData);
      try {
        if(response) {
-         console.log(response);
          this.setState({ sendingSuccess: true, sendingFailed: false, sending: false });
        }
      } catch (err) {
-       console.log(err);
-       this.setState({ sendingFailed: true, sendingSuccess: false, sending: false });
+       const errorMessage = 'Sending failed. Check connection and try again';
+       this.setState({ sendingFailed: true, sendingSuccess: false, errorMessage: errorMessage, sending: false });
      }
   }
 
@@ -69,6 +69,7 @@ class WriteComment extends React.Component {
           <div className="infocard__wrapper">
               <InfoCard>
                 <div className="infocard__inner">
+                 {this.state.sendingFailed ? <p className="sendingError">{this.state.errorMessage}</p> : null}
                  <h2>Say Something</h2>
                    <Label for="textarea">Say something about {this.state.username ? this.state.username : 'me'}</Label>
                    <Input type="textarea" value={this.state.textValue} onChange={this.changeTextHandler} name="text" placeholder="200 characters remaining" id="textarea" />

@@ -96,7 +96,7 @@ class TopNav extends Component {
     return (
       <div className="nav__container">
       {this.renderWelcomeModal()}
-      <h3 className="nav__tictalk">TicTalk</h3>
+      <h3 className="nav__tictalk">Druup</h3>
          <nav className="nav__nav">
             <ul className="nav__navcontainer">
                <li className="nav__navItems">{this.state.isAuth ? this.state.user : '' }</li>

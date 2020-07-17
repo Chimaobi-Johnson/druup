@@ -26,3 +26,8 @@
   margin-top: 1rem;
   border-radius: 0;
 }
+
+.sendingError {
+  padding: .5rem 1rem;
+  background-color: redl
+}

@@ -7,12 +7,10 @@
   width: 30%;
   margin: .5rem;
   transition: transform .5s;
-  /* background-image: url('../../images/joanna-kosinska-1_CMoFsPfso-unsplash.jpg'); */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom;
 }
-
 
 @media (max-width: 699px) {
   .CommentCardContainer {
@@ -21,7 +19,6 @@
       font-size: 1rem;
    }
 }
-
 
 .CommentCardContainer h4 {
   padding: 1rem;

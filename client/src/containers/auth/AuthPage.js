@@ -42,9 +42,9 @@ class AuthPage extends Component {
   }
 
   inputChangeHandler = (event, inputName) => {
-      const registerForm = { ...this.state.RegisterForm }
-      registerForm[inputName].value = event.target.value;
-      this.setState({ RegisterForm: registerForm });
+    const registerForm = { ...this.state.RegisterForm }
+    registerForm[inputName].value = event.target.value;
+    this.setState({ RegisterForm: registerForm });
   }
 
   loginInputChangeHandler = (event, inputName) => {
@@ -54,18 +54,16 @@ class AuthPage extends Component {
   }
 
   validateEmail = (email) => {
-   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
-    {
-    return (true)
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        return (true)
     }
     return (false)
-    }
+   }
 
   registerUserHandler = (event) => {
      event.preventDefault();
      const email = this.state.RegisterForm.regEmail.value;
      const password = this.state.RegisterForm.regPassword.value;
-     // const userName = this.state.RegisterForm.regUsername.value;
      let isEmailValid = this.validateEmail(email);
      if(!isEmailValid) {
        this.setState({ regError: "Email is not correct" });
@@ -73,9 +71,6 @@ class AuthPage extends Component {
        this.setState({ regError: "Password cannot be less than 4 characters" });
      } else {
        this.setState({ regLoading: true });
-       // let regData = new FormData();
-       // regData.append('email', email);
-       // regData.append('password', password);
        const regData = {
          email: email,
          password: password
@@ -84,6 +79,7 @@ class AuthPage extends Component {
        .then(result => {
          console.log(result);
          const email = result.data.user.email;
+         // Get username for next step
          const username = email.split("@")[0];
          const RegisterForm = { ...this.state.RegisterForm };
          RegisterForm.regUsername.value = username;
@@ -149,7 +145,6 @@ class AuthPage extends Component {
 
   addUserNameHandler = (event) => {
       event.preventDefault();
-
       const userName = this.state.RegisterForm.regUsername.value;
       if(userName.length < 3) {
         alert('Sorry your username cannot be less than 3 characters');
@@ -314,7 +309,7 @@ class AuthPage extends Component {
     	<div className="auth__container">
            <div className="auth__contentbox">
             <InfoCard>
-            <h4>TicTalk</h4>
+            <h4>Druup</h4>
               {authForm}
             </InfoCard>
              </div>

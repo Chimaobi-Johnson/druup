@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const keys = require('../config/keys');
 
 const User = require('../models/User');
 
@@ -31,7 +32,7 @@ router.post('/api/login', (req, res, next) => {
 		 email: loadedUser.email,
 		 userId: loadedUser._id.toString()
 	 },
-	 'djfindsnfl_sjfe=sdvosnvw=-sf9348yhv87h374i2',
+	 keys.cookieKey,
 	 { expiresIn: '1h' }
 	 );
 

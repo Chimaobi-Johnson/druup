@@ -7,8 +7,6 @@ import * as classes from './CommentCard.module.css';
 
 
 
-
-
 const CommentCard = props => {
   const {
     buttonLabel,
@@ -21,16 +19,15 @@ const CommentCard = props => {
 
   const toggle = () => setModal(!modal);
 
-
   const renderModal = (
     <Modal isOpen={modal} fade={false} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>Anonymous</ModalHeader>
-        <ModalBody>
+        <ModalHeader toggle={toggle}>Anonymous Comment</ModalHeader>
+        <ModalBody style={{ fontSize: '1.3rem' }}>
           {commentText}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        {/*  <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button> */}
         </ModalFooter>
       </Modal>
   )
@@ -38,13 +35,11 @@ const CommentCard = props => {
   return (
     <div className={classes.CommentCardContainer}>
       {renderModal}
-       <h4>Comments</h4>
+       <h4>Anonymous</h4>
        <p>{commentText}</p>
-       {/* <span>&larr;</span><span>&rarr;</span> */}
        { eyeView ? <p onClick={toggle}><FontAwesomeIcon icon={faEye} /></p> : null }
     </div>
   )
 }
-
 
 export default CommentCard;
